@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '10.0'
+
+target 'KKDeviceInsightKitSwift_Example' do
+  pod 'KKDeviceInsightKitSwift', :path => '../'
+
+  target 'KKDeviceInsightKitSwift_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
