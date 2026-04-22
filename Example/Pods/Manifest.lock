@@ -1,0 +1,16 @@
+PODS:
+  - KKDeviceInsightKitSwift (0.1.0)
+
+DEPENDENCIES:
+  - KKDeviceInsightKitSwift (from `../`)
+
+EXTERNAL SOURCES:
+  KKDeviceInsightKitSwift:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  KKDeviceInsightKitSwift: e9444ebc75e18c958c6a4c554aedd64113fb853a
+
+PODFILE CHECKSUM: fde12387aafd8b8f6dc1852622d386c12fa03756
+
+COCOAPODS: 1.16.2

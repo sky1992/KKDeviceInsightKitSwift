@@ -1,0 +1,6 @@
+framework module Pods_KKDeviceInsightKitSwift_Tests {
+  umbrella header "Pods-KKDeviceInsightKitSwift_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
