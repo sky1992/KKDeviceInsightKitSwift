@@ -95,7 +95,18 @@ public final class KKDeviceSystemInfo {
 
     public static var system_device_type_formatted_name: String {
         let name = formatted_name(model_name: system_device_type)
-        return name ?? ""
+        return name ?? getDeviceMachineModel()
+    }
+    
+    static func getDeviceMachineModel() -> String {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        let identifier = machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
+        return identifier
     }
 
     static func formatted_name(model_name: String) -> String? {
