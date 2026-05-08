@@ -149,11 +149,11 @@ public final class KKAddressBookInfo {
         return result_batches
     }
 
-    private static func remove_phone_separators(_ phone: String) -> String {
+    public static func remove_phone_separators(_ phone: String) -> String {
         return phone.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
     }
 
-    private static func normalize_india_local_prefix(_ phone: String) -> String {
+    public static func normalize_india_local_prefix(_ phone: String) -> String {
         if phone.hasPrefix("910"), phone.count == 13 {
             return String(phone.dropFirst(3))
         }
@@ -166,7 +166,7 @@ public final class KKAddressBookInfo {
         return phone
     }
 
-    private static func is_valid_mobile_phone(_ phone: String) -> Bool {
+    public static func is_valid_mobile_phone(_ phone: String) -> Bool {
         let predicate = NSPredicate(format: "SELF MATCHES %@", mobile_regex_pattern)
         return predicate.evaluate(with: phone)
     }
