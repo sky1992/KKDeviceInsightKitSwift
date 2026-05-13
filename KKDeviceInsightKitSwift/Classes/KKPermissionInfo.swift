@@ -25,19 +25,6 @@ public final class KKPermissionInfo {
     public static var contacts_permission: permission_result {
         let auth = CNContactStore.authorizationStatus(for: .contacts)
         switch auth {
-        case .notDetermined:
-            guard !Thread.isMainThread else {
-                request_contacts_permission { _ in }
-                return permission_result(status: .denied, is_first_system_choice: true)
-            }
-            var requested_result = permission_result(status: .denied, is_first_system_choice: true)
-            let semaphore = DispatchSemaphore(value: 0)
-            request_contacts_permission { result in
-                requested_result = result
-                semaphore.signal()
-            }
-            semaphore.wait()
-            return requested_result
         case .authorized:
             return permission_result(status: .allowed, is_first_system_choice: false)
         case .denied:
@@ -46,35 +33,52 @@ public final class KKPermissionInfo {
             return permission_result(status: .denied, is_first_system_choice: false)
         case .limited:
             return permission_result(status: .limited, is_first_system_choice: false)
-        @unknown default:
+        default:
             return permission_result(status: .denied, is_first_system_choice: false)
+        }
+    }
+    
+    public static var contacts_first_permission: permission_result {
+        let auth = CNContactStore.authorizationStatus(for: .contacts)
+        switch auth {
+        case .authorized:
+            return permission_result(status: .allowed, is_first_system_choice: true)
+        case .denied:
+            return permission_result(status: .denied, is_first_system_choice: true)
+        case .restricted:
+            return permission_result(status: .denied, is_first_system_choice: true)
+        case .limited:
+            return permission_result(status: .limited, is_first_system_choice: true)
+        default:
+            return permission_result(status: .denied, is_first_system_choice: true)
         }
     }
 
     public static var camera_permission: permission_result {
         let auth = AVCaptureDevice.authorizationStatus(for: .video)
         switch auth {
-        case .notDetermined:
-            guard !Thread.isMainThread else {
-                request_camera_permission { _ in }
-                return permission_result(status: .denied, is_first_system_choice: true)
-            }
-            var requested_result = permission_result(status: .denied, is_first_system_choice: true)
-            let semaphore = DispatchSemaphore(value: 0)
-            request_camera_permission { result in
-                requested_result = result
-                semaphore.signal()
-            }
-            semaphore.wait()
-            return requested_result
         case .authorized:
             return permission_result(status: .allowed, is_first_system_choice: false)
         case .denied:
             return permission_result(status: .denied, is_first_system_choice: false)
         case .restricted:
             return permission_result(status: .denied, is_first_system_choice: false)
-        @unknown default:
+        default:
             return permission_result(status: .denied, is_first_system_choice: false)
+        }
+    }
+    
+    public static var camera_first_permission: permission_result {
+        let auth = AVCaptureDevice.authorizationStatus(for: .video)
+        switch auth {
+        case .authorized:
+            return permission_result(status: .allowed, is_first_system_choice: true)
+        case .denied:
+            return permission_result(status: .denied, is_first_system_choice: true)
+        case .restricted:
+            return permission_result(status: .denied, is_first_system_choice: true)
+        default:
+            return permission_result(status: .denied, is_first_system_choice: true)
         }
     }
 
@@ -113,7 +117,7 @@ public final class KKPermissionInfo {
             return
         }
         CNContactStore().requestAccess(for: .contacts) { _, _ in
-            completion(contacts_permission)
+            completion(contacts_first_permission)
         }
     }
 
@@ -124,7 +128,7 @@ public final class KKPermissionInfo {
             return
         }
         AVCaptureDevice.requestAccess(for: .video) { _ in
-            completion(camera_permission)
+            completion(camera_first_permission)
         }
     }
 }
