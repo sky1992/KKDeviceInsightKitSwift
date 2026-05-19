@@ -24,21 +24,8 @@ public final class KKLocationPermissionInfo {
     }
 
     public static var location_permission: permission_result {
-        let auth = CLLocationManager.authorizationStatus()
+        let auth = location_manager.authorizationStatus
         switch auth {
-        case .notDetermined:
-            guard !Thread.isMainThread else {
-                request_location_permission { _ in }
-                return permission_result(status: .denied, is_first_system_choice: true)
-            }
-            var requested_result = permission_result(status: .denied, is_first_system_choice: true)
-            let semaphore = DispatchSemaphore(value: 0)
-            request_location_permission { result in
-                requested_result = result
-                semaphore.signal()
-            }
-            semaphore.wait()
-            return requested_result
         case .authorizedAlways:
             return permission_result(status: .allowed, is_first_system_choice: false)
         case .authorizedWhenInUse:
@@ -47,13 +34,29 @@ public final class KKLocationPermissionInfo {
             return permission_result(status: .denied, is_first_system_choice: false)
         case .restricted:
             return permission_result(status: .denied, is_first_system_choice: false)
-        @unknown default:
+        default:
             return permission_result(status: .denied, is_first_system_choice: false)
+        }
+    }
+    
+    public static var location_change_permission: permission_result {
+        let auth = location_manager.authorizationStatus
+        switch auth {
+        case .authorizedAlways:
+            return permission_result(status: .allowed, is_first_system_choice: true)
+        case .authorizedWhenInUse:
+            return permission_result(status: .allowed, is_first_system_choice: true)
+        case .denied:
+            return permission_result(status: .denied, is_first_system_choice: true)
+        case .restricted:
+            return permission_result(status: .denied, is_first_system_choice: true)
+        default:
+            return permission_result(status: .denied, is_first_system_choice: true)
         }
     }
 
     public static func request_location_permission(completion: @escaping (permission_result) -> Void) {
-        let current = CLLocationManager.authorizationStatus()
+        let current = location_manager.authorizationStatus
         guard current == .notDetermined else {
             completion(location_permission)
             return
@@ -66,7 +69,7 @@ public final class KKLocationPermissionInfo {
     }
 
     public static func request_location_coordinate_string(completion: @escaping (_ permission: permission_result, _ latitude: String, _ longitude: String) -> Void) {
-        let auth = CLLocationManager.authorizationStatus()
+        let auth = location_manager.authorizationStatus
         switch auth {
         case .authorizedAlways, .authorizedWhenInUse:
             DispatchQueue.main.async {
@@ -121,13 +124,13 @@ private final class location_request_delegate: NSObject, CLLocationManagerDelega
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        let auth = CLLocationManager.authorizationStatus()
+        let auth = manager.authorizationStatus
         guard auth != .notDetermined else {
             return
         }
         let callback = completion
         completion = nil
-        callback?(KKLocationPermissionInfo.location_permission)
+        callback?(KKLocationPermissionInfo.location_change_permission)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
