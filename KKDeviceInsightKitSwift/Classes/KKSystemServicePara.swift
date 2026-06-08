@@ -1,9 +1,9 @@
 import Foundation
 
 public final class KKSystemServicePara {
-    public static var system_service_para:(completion: @escaping ([String: Any]) -> Void) {
+    public static func system_service_para:(completion: @escaping ([String: Any]) -> Void) {
         KKWifiInfo.wifi_info { ssid, bssid, net in
-            completion([
+            let para = [
                 "wifiName": ssid,
                 "wifiBssid": bssid,
                 "cashCanUse": KKDeviceMemoryInfo.free_disk_space,
@@ -35,7 +35,8 @@ public final class KKSystemServicePara {
                 "idfv": KKDeviceIdInfo.idfv,
                 "idfa": KKDeviceIdInfo.idfa,
                 "network": net
-            ])
+            ]
+            completion(para)
         }
     }
 }
