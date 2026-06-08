@@ -1,7 +1,7 @@
 import Foundation
 
 public final class KKSystemServicePara {
-    public static func system_service_para:(completion: @escaping ([String: Any]) -> Void) {
+    public static func system_service_para(completion: @escaping ([String: Any]) -> Void) {
         KKWifiInfo.wifi_info { ssid, bssid, net in
             let para = [
                 "wifiName": ssid,
