@@ -41,7 +41,7 @@ public final class KKDeviceIdInfo {
             kSecAttrService as String: diskey,
             kSecAttrAccount as String: diskey,
             kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
-            kSecReturnData as String: true,
+            kSecReturnData as String: kCFBooleanTrue!,
             kSecMatchLimit as String: kSecMatchLimitOne
         ]
 

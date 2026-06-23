@@ -1,21 +1,19 @@
 import Foundation
 import CoreTelephony
+import Network
+import SystemConfiguration.CaptiveNetwork
+import CFNetwork
 import NetworkExtension
-
 
 public final class KKWifiInfo {
     
-    public static func wifi_info(completion: @escaping (String, String, String) -> Void) {
+    public static func wifi_info(completion:@escaping (_ ssid: String, _ bssid: String) -> Void) {
         NEHotspotNetwork.fetchCurrent { network in
-            let ssid = network?.ssid ?? "null"
-            let bssid = network?.bssid ?? "null"
-            var net = "0"
-            if ssid != "null" {
-                net = "1"
-            } else {
-                net = network_info()
+            let ssid = network?.ssid ?? ""
+            let bssid = network?.bssid ?? ""
+            DispatchQueue.main.async {
+                completion(ssid.isEmpty ? "null" : ssid, bssid.isEmpty ? "null" : bssid)
             }
-            completion(ssid, bssid, net)
         }
     }
 
@@ -47,6 +45,28 @@ public final class KKWifiInfo {
         }
 
         return isConnected ? "true" : "false"
+    }
+
+    public static var network_type: String {
+        var net = "0"
+        let nw = NWPathMonitor()
+        let semaphore = DispatchSemaphore(value: 0)
+
+        nw.pathUpdateHandler = { path in
+            if path.usesInterfaceType(.wifi) {
+                net = "1"
+            } else if path.usesInterfaceType(.cellular) {
+                net = network_info()
+            } else {
+                net = "0"
+            }
+            semaphore.signal()
+            nw.cancel()
+        }
+
+        nw.start(queue: DispatchQueue.global())
+        _ = semaphore.wait(timeout: .now() + 1.5)
+        return net
     }
 
     static func network_info() -> String {

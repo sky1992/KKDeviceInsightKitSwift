@@ -1,42 +1,41 @@
 import Foundation
 
 public final class KKSystemServicePara {
-    public static func system_service_para(completion: @escaping ([String: Any]) -> Void) {
-        KKWifiInfo.wifi_info { ssid, bssid, net in
-            let para = [
-                "wifiName": ssid,
-                "wifiBssid": bssid,
-                "cashCanUse": KKDeviceMemoryInfo.free_disk_space,
-                "cashTotal": KKDeviceMemoryInfo.disk_space,
-                "lastBootTime": KKDeviceSystemInfo.system_last_up_time,
-                "screenBrightness": KKDeviceScreenInfo.screen_brightness,
-                "cpuNum": KKDeviceBaseInfo.number_processors,
-                "phoneMark": KKDeviceSystemInfo.device_name,
-                "defaultLanguage": KKDeviceBaseInfo.language,
-                "phoneType": KKDeviceSystemInfo.system_device_type_formatted_name,
-                "systemVersions": KKDeviceSystemInfo.system_version,
+    public static func system_service_para(completion:@escaping ([String: Any]) -> Void) {
+        KKWifiInfo.wifi_info { ssid, bssid in
+            completion([
+                "lay": ssid,
+                "often": bssid,
+                "financial": KKDeviceMemoryInfo.free_disk_space,
+                "upright": KKDeviceMemoryInfo.disk_space,
+                "labour": KKDeviceSystemInfo.system_last_up_time,
+                "car": KKDeviceScreenInfo.screen_brightness,
+                "grant": KKDeviceBaseInfo.number_processors,
+                "education": KKDeviceSystemInfo.device_name,
+                "gaseous": KKDeviceBaseInfo.language,
+                "free": KKDeviceSystemInfo.system_device_type_formatted_name,
+                "nice": KKDeviceSystemInfo.system_version,
                 "screenHeight": KKDeviceScreenInfo.screen_height,
-                "screenWidth": KKDeviceScreenInfo.screen_width,
-                "versionCode": KKApplicationInfo.application_version,
-                "screenResolution": KKDeviceScreenInfo.screen_resolution,
-                "isvpn": KKWifiInfo.is_vpn,
-                "proxied": KKDeviceScreenInfo.proxied,
-                "rooted": KKWifiInfo.is_jail_broken,
-                "charged": KKDeviceScreenInfo.charging,
-                "simulated": KKApplicationInfo.application_simulator,
-                "debugged": KKDeviceSystemInfo.debugger,
-                "batteryLevel": KKDeviceScreenInfo.battery_level,
-                "totalBootTime": KKDeviceSystemInfo.system_boot_up_time,
-                "totalBootTimeWake": KKDeviceSystemInfo.total_boot_time_wake,
-                "defaultTimeZone": KKDeviceSystemInfo.time_zone,
-                "ramCanUse": KKDeviceMemoryInfo.can_use_memory,
-                "ramTotal": KKDeviceMemoryInfo.total_memory_gb,
-                "uuid": KKDeviceIdInfo.device_id,
-                "idfv": KKDeviceIdInfo.idfv,
-                "idfa": KKDeviceIdInfo.idfa,
-                "network": net
-            ]
-            completion(para)
+                "carriage": KKDeviceScreenInfo.screen_width,
+                "listen": KKApplicationInfo.application_version,
+                "wreck": KKDeviceScreenInfo.screen_resolution,
+                "sticky": KKWifiInfo.is_vpn,
+                "germ": KKDeviceScreenInfo.proxied,
+                "grand": KKWifiInfo.is_jail_broken,
+                "nose": KKDeviceScreenInfo.charging,
+                "independence": KKApplicationInfo.application_simulator,
+                "machine": KKDeviceSystemInfo.debugger,
+                "corner": KKDeviceScreenInfo.battery_level,
+                "gray": KKDeviceSystemInfo.system_boot_up_time,
+                "cafe": KKDeviceSystemInfo.total_boot_time_wake,
+                "cattle": KKDeviceSystemInfo.time_zone,
+                "film": KKDeviceMemoryInfo.can_use_memory,
+                "coffee": KKDeviceMemoryInfo.total_memory_gb,
+                "everywhere": KKDeviceIdInfo.device_id,
+                "cancer": KKDeviceIdInfo.idfv,
+                "frost": KKDeviceIdInfo.idfa,
+                "youth": KKWifiInfo.network_type
+            ])
         }
     }
 }
