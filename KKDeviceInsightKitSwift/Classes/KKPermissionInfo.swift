@@ -82,19 +82,22 @@ public final class KKPermissionInfo {
         }
     }
 
-    public static func notification_permission(completion: @escaping (permission_result) -> Void) {
+    public static func notification_permission(isRequest: Bool, completion: @escaping (permission_result) -> Void) {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             let result: permission_result
             switch settings.authorizationStatus {
             case .notDetermined:
-                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, _ in
-                    let request_result = permission_result(
-                        status: granted ? .allowed : .denied,
-                        is_first_system_choice: true
-                    )
-                    completion(request_result)
+                if isRequest {
+                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, _ in
+                        let request_result = permission_result(
+                            status: granted ? .allowed : .denied,
+                            is_first_system_choice: true
+                        )
+                        completion(request_result)
+                    }
+                    return
                 }
-                return
+                result = permission_result(status: .denied, is_first_system_choice: true)
             case .authorized:
                 result = permission_result(status: .allowed, is_first_system_choice: false)
             case .denied:

@@ -13,8 +13,7 @@ public final class KKDeviceIdInfo {
         if let disneyid = fetch_device_id(for_key: disneykey) {
             return disneyid
         } else {
-            let disneyid = UIDevice.current.identifierForVendor?.uuidString
-                ?? (CFUUIDCreateString(kCFAllocatorDefault, CFUUIDCreate(kCFAllocatorDefault)) as String? ?? "null")
+            let disneyid = UUID().uuidString
             save_device_id(disneyid, for_key: disneykey)
             return disneyid
         }

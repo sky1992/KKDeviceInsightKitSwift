@@ -80,7 +80,7 @@ public final class KKLocationPermissionInfo {
         case .notDetermined:
             request_location_permission { result in
                 guard result.status == .allowed else {
-                    completion(result, "", "")
+                    completion(result, "-360", "-360")
                     return
                 }
                 DispatchQueue.main.async {
@@ -90,9 +90,9 @@ public final class KKLocationPermissionInfo {
                 }
             }
         case .denied, .restricted:
-            completion(location_permission, "", "")
+            completion(location_permission, "-360", "-360")
         @unknown default:
-            completion(location_permission, "", "")
+            completion(location_permission, "-360", "-360")
         }
     }
 }
@@ -135,7 +135,7 @@ private final class location_request_delegate: NSObject, CLLocationManagerDelega
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {
-            finish_coordinate_once(latitude: "", longitude: "")
+            finish_coordinate_once(latitude: "-360", longitude: "-360")
             return
         }
         let latitude = String(format: "%.6f", location.coordinate.latitude)
@@ -144,6 +144,6 @@ private final class location_request_delegate: NSObject, CLLocationManagerDelega
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        finish_coordinate_once(latitude: "", longitude: "")
+        finish_coordinate_once(latitude: "-360", longitude: "-360")
     }
 }
