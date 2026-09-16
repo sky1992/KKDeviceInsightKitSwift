@@ -93,7 +93,9 @@ public final class KKPermissionInfo {
                             status: granted ? .allowed : .denied,
                             is_first_system_choice: true
                         )
-                        completion(request_result)
+                        DispatchQueue.main.async {
+                            completion(request_result)
+                        }
                     }
                     return
                 }
@@ -109,29 +111,39 @@ public final class KKPermissionInfo {
             @unknown default:
                 result = permission_result(status: .denied, is_first_system_choice: false)
             }
-            completion(result)
+            DispatchQueue.main.async {
+                completion(result)
+            }
         }
     }
 
     public static func request_contacts_permission(completion: @escaping (permission_result) -> Void) {
         let auth = CNContactStore.authorizationStatus(for: .contacts)
         guard auth == .notDetermined else {
-            completion(contacts_permission)
+            DispatchQueue.main.async {
+                completion(contacts_permission)
+            }
             return
         }
         CNContactStore().requestAccess(for: .contacts) { _, _ in
-            completion(contacts_first_permission)
+            DispatchQueue.main.async {
+                completion(contacts_first_permission)
+            }
         }
     }
 
     public static func request_camera_permission(completion: @escaping (permission_result) -> Void) {
         let auth = AVCaptureDevice.authorizationStatus(for: .video)
         guard auth == .notDetermined else {
-            completion(camera_permission)
+            DispatchQueue.main.async {
+                completion(camera_permission)
+            }
             return
         }
         AVCaptureDevice.requestAccess(for: .video) { _ in
-            completion(camera_first_permission)
+            DispatchQueue.main.async {
+                completion(camera_first_permission)
+            }
         }
     }
 }
